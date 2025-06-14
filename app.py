@@ -219,10 +219,16 @@ def show_scan_page(category, ports, udp_ports=None):
             
         with st.spinner(f"Scanning {ip_address} for {category} compliance..."):
             # Run Nmap scan for TCP ports
-            tcp_scan_results = scan_ports(ip_address, tcp_ports, 'tcp') if tcp_ports else {}
+            tcp_scan_results = {}
+            if tcp_ports:
+                tcp_scan = scan_ports(ip_address, tcp_ports)
+                tcp_scan_results = tcp_scan if isinstance(tcp_scan, dict) else {}
             
             # Run Nmap scan for UDP ports if specified
-            udp_scan_results = scan_ports(ip_address, udp_ports, 'udp') if udp_ports else {}
+            udp_scan_results = {}
+            if udp_ports:
+                udp_scan = scan_ports(ip_address, udp_ports, 'udp')
+                udp_scan_results = udp_scan if isinstance(udp_scan, dict) else {}
             
             # Merge scan results
             scan_results = {
